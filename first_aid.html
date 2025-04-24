@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Types of First Aid Items</title>
+  <style>
+    /* theme variables */
+    :root {
+      --bg: #f4f4f4;
+      --text: #333;
+      --card-bg: #fff;
+      --primary: #28a745;      /* green primary */
+      --header-bg: #27ae60;
+    }
+    body.dark {
+      --bg: #2c3e50;
+      --text: #ecf0f1;
+      --card-bg: #34495e;
+      --primary: #2ecc71;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html { scroll-behavior: smooth }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .3s, color .3s;
+    }
+    header {
+      position: relative;
+      background: var(--header-bg);
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .home-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: white;
+      background: transparent;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    .home-btn:hover {
+      opacity: 0.8;
+    }
+    main {
+      max-width: 960px; margin: 2rem auto; padding: 0 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .card.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .card img {
+      display: block; width: 100%; max-height: 200px;
+      object-fit: contain; margin: 0 auto;
+    }
+    .card-content { padding: 1rem; flex: 1 }
+    .card-content h2 {
+      margin-top: 0; font-size: 1.25rem; color: var(--primary)
+    }
+    .card-content p { margin: .5rem 0 0 }
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      outline: 2px solid var(--primary);
+      outline-offset: 4px;
+      filter: drop-shadow(0 0 8px var(--primary));
+    }
+    footer {
+      position: relative; text-align: center;
+      padding: 2rem 1rem 4rem; font-size: .875rem; color: #777;
+    }
+    #controls {
+      position: fixed; bottom:1rem; right:1rem;
+      display:flex; gap:.5rem; direction:ltr;
+    }
+    .ctrl-btn {
+      background:var(--primary); border:none;
+      color:white; font-size:1.25rem; padding:.5rem;
+      border-radius:50%; cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      transition:background .3s;
+    }
+    .ctrl-btn:hover { background:#218c3d }
+    .modal {
+      position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.6);
+      backdrop-filter:blur(5px);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .3s ease;
+      z-index:2000;
+    }
+    .modal.show { opacity:1; pointer-events:auto }
+    .modal-content {
+      background:var(--card-bg); color:var(--text);
+      padding:1.5rem; border-radius:8px;
+      width:90%; max-width:600px; max-height:90vh;
+      overflow-y:auto; position:relative;
+      animation:slideDown .3s ease forwards;
+    }
+    @keyframes slideDown {
+      from {transform:translateY(-20px);opacity:0}
+      to   {transform:translateY(0);opacity:1}
+    }
+    .modal-close {
+      position:absolute; top:.5rem; right:.75rem;
+      background:transparent; border:none;
+      font-size:1.5rem; cursor:pointer; color:var(--text);
+    }
+    .modal-content img {
+      display:block; width:100%; max-height:300px;
+      object-fit:contain; margin-bottom:1rem;
+    }
+    .modal-content h3 {
+      margin:1rem 0 .5rem; color:var(--primary);
+    }
+    .modal-content ul {
+      list-style:disc inside; margin:0 0 1rem; padding:0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="home-btn" aria-label="Home">🏠</a>
+    <h1 id="header-title">Types of First Aid Items</h1>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card" data-type="bandages">
+        <img src="images/adhesive-bandages.png" alt="Adhesive Bandages">
+        <div class="card-content">
+          <h2 id="title-bandages">Adhesive Bandages</h2>
+          <p id="desc-bandages">Assorted sterile bandages for minor cuts and scrapes.</p>
+        </div>
+      </div>
+      <div class="card" data-type="gauze">
+        <img src="images/gauze-pads.png" alt="Gauze Pads">
+        <div class="card-content">
+          <h2 id="title-gauze">Sterile Gauze Pads</h2>
+          <p id="desc-gauze">Various sizes of absorbent sterile gauze pads.</p>
+        </div>
+      </div>
+      <div class="card" data-type="tape">
+        <img src="images/adhesive-tape.png" alt="Medical Adhesive Tape">
+        <div class="card-content">
+          <h2 id="title-tape">Medical Adhesive Tape</h2>
+          <p id="desc-tape">Hypoallergenic tape to secure dressings and gauze.</p>
+        </div>
+      </div>
+      <div class="card" data-type="wipes">
+        <img src="images/antiseptic-wipes.png" alt="Antiseptic Wipes">
+        <div class="card-content">
+          <h2 id="title-wipes">Antiseptic Wipes</h2>
+          <p id="desc-wipes">Alcohol or povidone-iodine wipes to clean skin.</p>
+        </div>
+      </div>
+      <div class="card" data-type="ointment">
+        <img src="images/antibiotic-ointment.png" alt="Antibiotic Ointment">
+        <div class="card-content">
+          <h2 id="title-ointment">Antibiotic Ointment</h2>
+          <p id="desc-ointment">Topical antibiotic to prevent infection in wounds.</p>
+        </div>
+      </div>
+      <div class="card" data-type="tweezers">
+        <img src="images/tweezers.png" alt="Tweezers">
+        <div class="card-content">
+          <h2 id="title-tweezers">Tweezers</h2>
+          <p id="desc-tweezers">Stainless-steel tweezers for splinter removal.</p>
+        </div>
+      </div>
+      <div class="card" data-type="scissors">
+        <img src="images/scissors-blunt.png" alt="Blunt Tip Scissors">
+        <div class="card-content">
+          <h2 id="title-scissors">Blunt Tip Scissors</h2>
+          <p id="desc-scissors">Angled, blunt-tip scissors for safely cutting dressings.</p>
+        </div>
+      </div>
+      <div class="card" data-type="gloves">
+        <img src="images/disposable-gloves.png" alt="Disposable Gloves">
+        <div class="card-content">
+          <h2 id="title-gloves">Disposable Gloves</h2>
+          <p id="desc-gloves">Nitrile or vinyl gloves for hygiene and protection.</p>
+        </div>
+      </div>
+      <div class="card" data-type="coldpack">
+        <img src="images/instant-cold-pack.png" alt="Instant Cold Pack">
+        <div class="card-content">
+          <h2 id="title-coldpack">Instant Cold Pack</h2>
+          <p id="desc-coldpack">Single-use cold pack for reducing swelling.</p>
+        </div>
+      </div>
+      <div class="card" data-type="ace">
+        <img src="images/ace-bandage.png" alt="Elastic ACE Bandage">
+        <div class="card-content">
+          <h2 id="title-ace">Elastic (ACE) Bandage</h2>
+          <p id="desc-ace">Adjustable compression bandage for sprains and strains.</p>
+        </div>
+      </div>
+      <div class="card" data-type="cpr">
+        <img src="images/cpr-mask.png" alt="CPR Face Shield">
+        <div class="card-content">
+          <h2 id="title-cpr">CPR Face Shield</h2>
+          <p id="desc-cpr">Barrier device with one-way valve for rescue breaths.</p>
+        </div>
+      </div>
+      <div class="card" data-type="meds">
+        <img src="images/pain-relievers.png" alt="Pain Relievers & Antihistamine">
+        <div class="card-content">
+          <h2 id="title-meds">Pain Relievers & Antihistamine</h2>
+          <p id="desc-meds">Ibuprofen/acetaminophen and an antihistamine tablet pack.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div id="controls">
+      <button id="theme-toggle" class="ctrl-btn" aria-label="Toggle theme">🌓</button>
+      <button id="lang-toggle"  class="ctrl-btn" aria-label="Toggle language">🌐</button>
+    </div>
+    <div id="footer-text">© 2025 UTAS (University of Technology and Applied Sciences Muscat)</div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img id="modal-img" src="" alt="">
+      <h2 id="modal-title"></h2>
+      <p id="modal-text"></p>
+
+      <h3 id="hdr-purpose"></h3>
+      <ul id="modal-purpose"></ul>
+
+      <h3 id="hdr-composition"></h3>
+      <ul id="modal-composition"></ul>
+
+      <h3 id="hdr-packaging"></h3>
+      <ul id="modal-packaging"></ul>
+
+      <h3 id="hdr-usage"></h3>
+      <ul id="modal-usage"></ul>
+
+      <h3 id="hdr-safety"></h3>
+      <ul id="modal-safety"></ul>
+
+      <h3 id="hdr-maintenance"></h3>
+      <ul id="modal-maintenance"></ul>
+
+      <h3 id="hdr-certifications"></h3>
+      <ul id="modal-certifications"></ul>
+
+      <h3 id="hdr-storage"></h3>
+      <ul id="modal-storage"></ul>
+
+      <h3 id="hdr-ergonomics"></h3>
+      <ul id="modal-ergonomics"></ul>
+
+      <h3 id="hdr-disposal"></h3>
+      <ul id="modal-disposal"></ul>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        dir: 'ltr', langAttr: 'en',
+        header: 'Types of First Aid Items',
+        footer: '© 2025 UTAS (University of Technology and Applied Sciences Muscat)',
+        headings: {
+          purpose:      'Purpose & Use Cases',
+          composition:  'Composition & Mechanism',
+          packaging:    'Packaging & Shelf Life',
+          usage:        'How to Use',
+          safety:       'Safety & Precautions',
+          maintenance:  'Inspection & Replacement',
+          certifications:'Standards & Certifications',
+          storage:      'Storage & Accessibility',
+          ergonomics:   'Ergonomics & Handling',
+          disposal:     'Disposal & Environmental Impact'
+        },
+        bandages: {
+          title: 'Adhesive Bandages',
+          desc:  'Assorted sterile bandages for minor cuts and scrapes.',
+          extra: 'Protects wounds from infection and absorbs exudate.',
+          purpose:      ['Protect minor cuts and scrapes', 'Keep wound clean'],
+          composition:  ['Sterile gauze pad', 'Flexible adhesive backing'],
+          packaging:    ['Individual sterile wrappers', '5-year shelf life'],
+          usage:        ['Clean and dry skin', 'Apply over wound and press edges'],
+          safety:       ['Replace if soiled or wet', 'Avoid use on burns'],
+          maintenance:  ['Check expiration regularly'],
+          certifications:['ISO 13485 certified'],
+          storage:      ['Cool, dry place away from sunlight'],
+          ergonomics:   ['Easy-peel backing', 'Flexible fit'],
+          disposal:     ['Dispose as medical waste']
+        },
+        gauze: {
+          title: 'Sterile Gauze Pads',
+          desc:  'Various sizes of absorbent sterile gauze pads.',
+          extra: 'Multiple layers absorb fluids and help prevent infection.',
+          purpose:      ['Absorb fluids and cover wounds'],
+          composition:  ['Multi-layer sterile gauze'],
+          packaging:    ['Sterile packet', '5-year shelf life'],
+          usage:        ['Clean area', 'Place gauze and secure with tape'],
+          safety:       ['Avoid direct hand contact', 'Ensure sterility before use'],
+          maintenance:  ['Check packet integrity and expiry'],
+          certifications:['ISO 13485 certified'],
+          storage:      ['Room temperature storage'],
+          ergonomics:   ['Lightweight and foldable'],
+          disposal:     ['Dispose as medical waste']
+        },
+        tape: {
+          title: 'Medical Adhesive Tape',
+          desc:  'Hypoallergenic tape to secure dressings and gauze.',
+          extra: 'Provides secure fixation without irritation.',
+          purpose:      ['Secure dressings and bandages'],
+          composition:  ['Hypoallergenic adhesive','Cloth backing'],
+          packaging:    ['Roll in dispenser','2-year shelf life'],
+          usage:        ['Cut desired length','Apply over edges of dressing'],
+          safety:       ['Test on small skin area first','Avoid on broken skin'],
+          maintenance:  ['Seal roll after use'],
+          certifications:['ISO 11607 certified'],
+          storage:      ['Keep dry and cool'],
+          ergonomics:   ['Easy-tear material','Conformable'],
+          disposal:     ['Dispose in regular trash']
+        },
+        wipes: {
+          title: 'Antiseptic Wipes',
+          desc:  'Alcohol or povidone-iodine wipes to clean skin.',
+          extra: 'Disinfects skin and removes debris effectively.',
+          purpose:      ['Clean and disinfect skin'],
+          composition:  ['70% alcohol solution or povidone-iodine'],
+          packaging:    ['Individual packets','12-month shelf life'],
+          usage:        ['Open packet','Wipe area and let air dry'],
+          safety:       ['May dry skin with frequent use','Avoid eyes'],
+          maintenance:  ['Check packet seal'],
+          certifications:['EN 1500 compliant'],
+          storage:      ['Avoid high heat'],
+          ergonomics:   ['Pre-moistened','Easy-tear packet'],
+          disposal:     ['Dispose in regular trash']
+        },
+        ointment: {
+          title: 'Antibiotic Ointment',
+          desc:  'Topical antibiotic to prevent infection in wounds.',
+          extra: 'Forms protective barrier and promotes healing.',
+          purpose:      ['Prevent bacterial infection','Promote wound healing'],
+          composition:  ['Neomycin or bacitracin ointment'],
+          packaging:    ['Tube','2-year shelf life'],
+          usage:        ['Apply thin layer on clean wound'],
+          safety:       ['Avoid in case of allergy','Do not ingest'],
+          maintenance:  ['Check expiration'],
+          certifications:['FDA approved'],
+          storage:      ['Room temperature'],
+          ergonomics:   ['Squeeze tube','Controlled dosing'],
+          disposal:     ['Discard empty tube']
+        },
+        tweezers: {
+          title: 'Tweezers',
+          desc:  'Stainless-steel tweezers for splinter removal.',
+          extra: 'Fine tips allow precise removal of debris.',
+          purpose:      ['Remove splinters and small foreign objects'],
+          composition:  ['Stainless steel with fine tips'],
+          packaging:    ['Sterile pack'],
+          usage:        ['Grip object gently','Withdraw carefully'],
+          safety:       ['Sterilize before use','Avoid use on deep wounds'],
+          maintenance:  ['Sterilize after each use'],
+          certifications:['ISO 13485 certified'],
+          storage:      ['Protective case'],
+          ergonomics:   ['Comfort grip','Lightweight'],
+          disposal:     ['Reusable after sterilization']
+        },
+        scissors: {
+          title: 'Blunt Tip Scissors',
+          desc:  'Angled, blunt-tip scissors for safely cutting dressings.',
+          extra: 'Designed to cut materials without injuring skin.',
+          purpose:      ['Cut tapes, bandages, and clothing'],
+          composition:  ['Stainless steel blades','Blunt tips'],
+          packaging:    ['Sterile pack'],
+          usage:        ['Open blades','Cut away from skin'],
+          safety:       ['Keep closed when not in use','Keep away from children'],
+          maintenance:  ['Clean and dry after use'],
+          certifications:['EN 60601 compliant'],
+          storage:      ['In first aid kit'],
+          ergonomics:   ['Non-slip handles','Ergonomic shape'],
+          disposal:     ['Reusable after sterilization']
+        },
+        gloves: {
+          title: 'Disposable Gloves',
+          desc:  'Nitrile or vinyl gloves for hygiene and protection.',
+          extra: 'Prevent cross-contamination and exposure.',
+          purpose:      ['Protect hands from contaminants'],
+          composition:  ['Nitrile or vinyl material'],
+          packaging:    ['Pair in sealed pouch','3-year shelf life'],
+          usage:        ['Put on before treatment','Discard after use'],
+          safety:       ['Ensure proper fit','Avoid tears'],
+          maintenance:  ['Check integrity before use'],
+          certifications:['EN 374 compliant'],
+          storage:      ['Cool, dry place'],
+          ergonomics:   ['Ambidextrous','Textured fingertips'],
+          disposal:     ['Dispose as medical waste']
+        },
+        coldpack: {
+          title: 'Instant Cold Pack',
+          desc:  'Single-use cold pack for reducing swelling.',
+          extra: 'Activates by squeezing to mix chemicals.',
+          purpose:      ['Reduce pain and swelling'],
+          composition:  ['Water and ammonium nitrate'],
+          packaging:    ['Single-use pack','24-month shelf life'],
+          usage:        ['Squeeze to activate','Apply through cloth'],
+          safety:       ['Do not apply directly to skin','Check for leaks'],
+          maintenance:  ['Store at room temperature'],
+          certifications:['CE marked'],
+          storage:      ['Dry area'],
+          ergonomics:   ['Lightweight','Pliable'],
+          disposal:     ['Dispose in regular trash']
+        },
+        ace: {
+          title: 'Elastic (ACE) Bandage',
+          desc:  'Adjustable compression bandage for sprains and strains.',
+          extra: 'Provides support and reduces swelling.',
+          purpose:      ['Support sprains and strains','Maintain compression'],
+          composition:  ['Elastic knitted cotton blend'],
+          packaging:    ['Roll with fastener clips','2-year shelf life'],
+          usage:        ['Wrap firmly','Secure with clips'],
+          safety:       ['Avoid cutting off circulation','Check tightness'],
+          maintenance:  ['Wash per instructions'],
+          certifications:['ISO 9001 certified'],
+          storage:      ['Cool, dry place'],
+          ergonomics:   ['Breathable','Reusable'],
+          disposal:     ['Wash and reuse']
+        },
+        cpr: {
+          title: 'CPR Face Shield',
+          desc:  'Barrier device with one-way valve for rescue breaths.',
+          extra: 'Protects rescuer from backflow of fluids.',
+          purpose:      ['Provide safe rescue breaths'],
+          composition:  ['Silicone mask','One-way valve'],
+          packaging:    ['Sterile pouch','2-year shelf life'],
+          usage:        ['Open pouch','Position over mouth','Deliver breaths'],
+          safety:       ['Inspect valve before use','Discard if damaged'],
+          maintenance:  ['Replace after each use'],
+          certifications:['EN 14683 compliant'],
+          storage:      ['First aid kit'],
+          ergonomics:   ['Compact','Adjustable fit'],
+          disposal:     ['Dispose as medical waste']
+        },
+        meds: {
+          title: 'Pain Relievers & Antihistamine',
+          desc:  'Ibuprofen/acetaminophen and antihistamine tablets.',
+          extra: 'Manage pain, fever, and allergic reactions.',
+          purpose:      ['Reduce pain and fever','Relieve allergic symptoms'],
+          composition:  ['200mg ibuprofen', '10mg loratadine'],
+          packaging:    ['Blister pack','24-month shelf life'],
+          usage:        ['Take with water','Follow dosage instructions'],
+          safety:       ['Do not exceed recommended dose','Consult doctor if pregnant'],
+          maintenance:  ['Check expiration regularly'],
+          certifications:['FDA approved'],
+          storage:      ['Cool, dry place'],
+          ergonomics:   ['Portable blister pack'],
+          disposal:     ['Dispose per local regulations']
+        }
+      },
+      ar: {
+        dir: 'rtl', langAttr: 'ar',
+        header: 'أنواع أدوات الإسعافات الأولية',
+        footer: '© 2025 جامعة التقنية والعلوم التطبيقية مسقط',
+        headings: {
+          purpose:      'الغرض وحالات الاستخدام',
+          composition:  'التركيب وطريقة العمل',
+          packaging:    'التعبئة وعمر الصلاحية',
+          usage:        'طريقة الاستخدام',
+          safety:       'السلامة والتحذيرات',
+          maintenance:  'الفحص والاستبدال',
+          certifications:'المعايير والشهادات',
+          storage:      'التخزين وإمكانية الوصول',
+          ergonomics:   'سهولة الاستخدام',
+          disposal:     'التخلص والتأثير البيئي'
+        },
+        bandages: {
+          title: 'لاصقات طبية',
+          desc:  'لاصقات معقمة بأحجام متنوعة للجروح والخدوش البسيطة.',
+          extra: 'تحمي الجرح من العدوى وتمتص الإفرازات.',
+          purpose:      ['حماية الجروح والخدوش البسيطة','الحفاظ على نظافة الجرح'],
+          composition:  ['شاش معقم','لاصق مرن'],
+          packaging:    ['عبوة فردية معقمة','عمر صلاحية 5 سنوات'],
+          usage:        ['نظف وجفف الجلد','ضع اللاصق واضغط الحواف'],
+          safety:       ['استبدل إذا تلوث أو تبلل','لا تستخدم على الحروق'],
+          maintenance:  ['تحقق من تاريخ الصلاحية بانتظام'],
+          certifications:['معتمد ISO 13485'],
+          storage:      ['مكان جاف وبارد بعيدًا عن الشمس'],
+          ergonomics:   ['سهل التقشير','مرن ليلائم الجسم'],
+          disposal:     ['يتخلص منه كنفايات طبية']
+        },
+        gauze: {
+          title: 'ضمادات شاش معقمة',
+          desc:  'ضمادات شاش بأحجام مختلفة لامتصاص السوائل وتغطية الجروح.',
+          extra: 'طبقات متعددة لامتصاص السوائل والحماية من العدوى.',
+          purpose:      ['امتصاص السوائل','تغطية الجروح الكبيرة'],
+          composition:  ['شاش معقم متعدد الطبقات'],
+          packaging:    ['عبوة معقمة','عمر صلاحية 5 سنوات'],
+          usage:        ['نظف المنطقة','ضع الشاش وثبته بالشريط'],
+          safety:       ['تجنب اللمس المباشر','تأكد من التعقيم قبل الاستخدام'],
+          maintenance:  ['تحقق من تاريخ الصلاحية'],
+          certifications:['معتمد ISO 13485'],
+          storage:      ['درجات حرارة الغرفة'],
+          ergonomics:   ['خفيف الوزن','قابل للطي'],
+          disposal:     ['يتخلص منه كنفايات طبية']
+        },
+        tape: {
+          title: 'شريط لاصق طبي',
+          desc:  'شريط جلدي لطيف لتثبيت الضمادات والشاش.',
+          extra: 'يثبت الضمادات دون تهيج الجلد.',
+          purpose:      ['تثبيت الضمادات والشاش'],
+          composition:  ['لاصق طبي مقاوم للحساسية','قاعدة قماشية'],
+          packaging:    ['لفة في موزع','عمر صلاحية سنتين'],
+          usage:        ['قص الطول المطلوب','ضع فوق حواف الضمادة'],
+          safety:       ['اختبر على جزء صغير من الجلد','لا تستخدم على جروح عميقة'],
+          maintenance:  ['أعد لف الشريط بعد الاستخدام'],
+          certifications:['معتمد ISO 11607'],
+          storage:      ['مكان جاف وبارد'],
+          ergonomics:   ['سهل التمزق','قابل للثني'],
+          disposal:     ['يتخلص منه في النفايات العادية']
+        },
+        wipes: {
+          title: 'مناديل معقمة',
+          desc:  'مناديل كحولية أو يود بوفيدون لتعقيم الجلد.',
+          extra: 'تطهر الجلد وتزيل الأوساخ بفعالية.',
+          purpose:      ['تنظيف وتعقيم الجلد'],
+          composition:  ['محلول كحولي 70% أو يود بوفيدون'],
+          packaging:    ['عبوات فردية','عمر صلاحية 12 شهرًا'],
+          usage:        ['افتح العبوة','امسح المنطقة واتركها للجفاف'],
+          safety:       ['قد تسبب جفاف الجلد','تجنب ملامسة العينين'],
+          maintenance:  ['تحقق من سلامة الغلاف'],
+          certifications:['مطابق EN 1500'],
+          storage:      ['تجنب الحرارة العالية'],
+          ergonomics:   ['سهلة الاستخدام','طيًّّة مُريحة'],
+          disposal:     ['يتخلص منها في النفايات العادية']
+        },
+        ointment: {
+          title: 'مرهم مضاد حيوي',
+          desc:  'مرهم موضعي يمنع العدوى في الجروح.',
+          extra: 'يشكل حاجزًا واقيًا ويساعد على الشفاء.',
+          purpose:      ['منع العدوى البكتيرية','تحفيز شفاء الجرح'],
+          composition:  ['مرهم نيوميسين أو باسيتراسين'],
+          packaging:    ['أنبوب','عمر صلاحية سنتين'],
+          usage:        ['ضع طبقة رفيعة على الجرح'],
+          safety:       ['تجنب الحساسية','لا يُستخدم عن طريق الفم'],
+          maintenance:  ['تحقق من تاريخ الصلاحية'],
+          certifications:['معتمد FDA'],
+          storage:      ['درجات حرارة الغرفة'],
+          ergonomics:   ['أنبوب قابل للعصر','جرعة محسوبة'],
+          disposal:     ['تخلص من الأنبوب الفارغ']
+        },
+        tweezers: {
+          title: 'ملقط طبي',
+          desc:  'ملقط من الفولاذ لإزالة الشظايا.',
+          extra: 'رأس مدبب للدقة في التقاط الشظايا.',
+          purpose:      ['إزالة الشظايا والأجسام الصغيرة'],
+          composition:  ['فولاذ مقاوم للصدأ','رأس دقيق'],
+          packaging:    ['عبوة معقمة'],
+          usage:        ['أمسك بلطف','اسحب الشظية بحذر'],
+          safety:       ['عقم قبل الاستخدام','لا تستخدم على الجروح العميقة'],
+          maintenance:  ['عقم بعد كل استخدام'],
+          certifications:['معتمد ISO 13485'],
+          storage:      ['في جراب واقٍ'],
+          ergonomics:   ['مقبض مريح','خفيف الوزن'],
+          disposal:     ['قابل لإعادة التعقيم']
+        },
+        scissors: {
+          title: 'مقص بنهايات مدببة آمنة',
+          desc:  'مقص زاويّة لقص الضمادات والملابس بأمان.',
+          extra: 'شفرات تمنع الإضرار بالجلد.',
+          purpose:      ['قص الضمادات والملابس في الطوارئ'],
+          composition:  ['فولاذ مقاوم للصدأ','نهايات مدببة'],
+          packaging:    ['عبوة معقمة'],
+          usage:        ['افتح المقص','اقطع بعيدًا عن الجلد'],
+          safety:       ['أغلقه عند عدم الاستخدام','ابتعد عنه الأطفال'],
+          maintenance:  ['نظف وجفف بعد الاستخدام'],
+          certifications:['مطابق EN 60601'],
+          storage:      ['في حقيبة الإسعافات الأولية'],
+          ergonomics:   ['مقابض مريحة','مانع انزلاق'],
+          disposal:     ['قابل لإعادة التعقيم']
+        },
+        gloves: {
+          title: 'قفازات لاظهرة',
+          desc:  'قفازات نيتريل أو فينيل للحماية والنظافة.',
+          extra: 'تحمي اليدين من الملوثات.',
+          purpose:      ['حماية اليدين من التلوث'],
+          composition:  ['نيتريل أو فينيل'],
+          packaging:    ['زوج في كيس','عمر صلاحية 3 سنوات'],
+          usage:        ['ارتدِ قبل المعالجة','تخلص بعد الاستخدام'],
+          safety:       ['تأكد من المقاس المناسب','تجنب التمزق'],
+          maintenance:  ['تحقق من سلامة القفاز'],
+          certifications:['مطابق EN 374'],
+          storage:      ['مكان جاف وبارد'],
+          ergonomics:   ['نصفيّة للأصابع','قابلة للارتداء بالشكلين'],
+          disposal:     ['يتخلص كنفايات طبية']
+        },
+        coldpack: {
+          title: 'كيس ثلج فوري',
+          desc:  'كيس واحد الاستخدام لتقليل التورم.',
+          extra: 'ينشط بالضغط لخلط المواد الكيميائية.',
+          purpose:      ['تقليل الألم والتورم'],
+          composition:  ['ماء ونترات الأمونيوم'],
+          packaging:    ['عبوة استخدام واحد','عمر صلاحية 24 شهرًا'],
+          usage:        ['اضغط للتفعيل','ضعه عبر قماش'],
+          safety:       ['لا تضعه مباشرة على الجلد','تحقق من التسريبات'],
+          maintenance:  ['احتفظ بدرجة حرارة الغرفة'],
+          certifications:['علامة CE'],
+          storage:      ['مكان جاف'],
+          ergonomics:   ['خفيف الوزن','مرن'],
+          disposal:     ['يتخلص في النفايات العادية']
+        },
+        ace: {
+          title: 'ضمادة مطاطية (ACE)',
+          desc:  'ضمادة ضغط قابلة للتعديل للالتواءات والشدّات.',
+          extra: 'توفر دعمًا وتقلل التورم.',
+          purpose:      ['دعم الالتواءات','الحفاظ على الضغط'],
+          composition:  ['خليط قطني مطاطي'],
+          packaging:    ['لفة مع مشابك','عمر صلاحية سنتين'],
+          usage:        ['لف بإحكام','ثبت بالمشابك'],
+          safety:       ['تجنب منع الدورة الدموية','تحقق من الضيق'],
+          maintenance:  ['اغسل حسب التعليمات'],
+          certifications:['معتمد ISO 9001'],
+          storage:      ['مكان جاف وبارد'],
+          ergonomics:   ['قابل للتنفس','قابل لإعادة الاستخدام'],
+          disposal:     ['يغسل ويعاد استخدامه']
+        },
+        cpr: {
+          title: 'واقي تنفس CPR',
+          desc:  'جهاز حاجز بصمام للتنفس الاصطناعي الآمن.',
+          extra: 'يحمي من ارتداد السوائل.',
+          purpose:      ['تقديم التنفس الاصطناعي بأمان'],
+          composition:  ['قناع سيليكون','صمام أحادي الاتجاه'],
+          packaging:    ['كيس معقم','عمر صلاحية سنتين'],
+          usage:        ['افتح الكيس','ضعه على الفم','ابدأ التنفس'],
+          safety:       ['افحص الصمام قبل الاستخدام','تخلص إذا كان التسلّب'],
+          maintenance:  ['استبدله بعد كل استعمال'],
+          certifications:['مطابق EN 14683'],
+          storage:      ['في حقيبة الإسعافات الأولية'],
+          ergonomics:   ['حجم مضغوط','يلائم معظم الوجوه'],
+          disposal:     ['يتخلص كنفايات طبية']
+        },
+        meds: {
+          title: 'مسكنات ومضاد للهستامين',
+          desc:  'أقراص إيبوبروفين/أسيتامينوفين ومضاد للهستامين.',
+          extra: 'لتخفيف الألم والحمى والحساسية.',
+          purpose:      ['تخفيف الألم والحمى','تخفيف أعراض الحساسية'],
+          composition:  ['200 ملغ إيبوبروفين','10 ملغ لوراتادين'],
+          packaging:    ['علبة بها 20 قرص','عمر صلاحية 24 شهرًا'],
+          usage:        ['تؤخذ مع الماء','اتبع الجرعة الموصى بها'],
+          safety:       ['لا تتجاوز الجرعة','استشر الطبيب للحامل'],
+          maintenance:  ['تحقق من تاريخ الصلاحية'],
+          certifications:['معتمد FDA'],
+          storage:      ['مكان جاف وبارد'],
+          ergonomics:   ['علبة قابلة للحمل','مقصّات منفصلة لكل قرص'],
+          disposal:     ['اتبع اللوائح المحلية للتخلص']
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentLang = 'en';
+
+      // reveal cards
+      document.querySelectorAll('.card').forEach(card => {
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        obs.observe(card);
+      });
+
+      // theme toggle
+      document.getElementById('theme-toggle')
+        .addEventListener('click', () => document.body.classList.toggle('dark'));
+
+      // language toggle
+      document.getElementById('lang-toggle')
+        .addEventListener('click', () => {
+          currentLang = currentLang === 'en' ? 'ar' : 'en';
+          applyLang(currentLang);
+        });
+
+      // modal logic
+      const modal      = document.getElementById('modal');
+      const mImg       = document.getElementById('modal-img');
+      const mTitle     = document.getElementById('modal-title');
+      const mText      = document.getElementById('modal-text');
+      const closeBtn   = document.querySelector('.modal-close');
+
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const type = card.dataset.type;
+          const t    = translations[currentLang][type];
+          mImg.src           = card.querySelector('img').src;
+          mImg.alt           = t.title;
+          mTitle.textContent = t.title;
+          mText.textContent  = t.extra;
+          const fill = (id, arr) => {
+            document.getElementById(id).innerHTML =
+              arr.map(i => `<li>${i}</li>`).join('');
+          };
+          fill('modal-purpose',      t.purpose);
+          fill('modal-composition',  t.composition);
+          fill('modal-packaging',    t.packaging);
+          fill('modal-usage',        t.usage);
+          fill('modal-safety',       t.safety);
+          fill('modal-maintenance',  t.maintenance);
+          fill('modal-certifications', t.certifications);
+          fill('modal-storage',      t.storage);
+          fill('modal-ergonomics',   t.ergonomics);
+          fill('modal-disposal',     t.disposal);
+          modal.classList.add('show');
+        });
+      });
+
+      // close modal
+      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+      modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('show');
+      });
+
+      function applyLang(lang) {
+        const t = translations[lang];
+        document.documentElement.dir  = t.dir;
+        document.documentElement.lang = t.langAttr;
+        document.getElementById('header-title').textContent = t.header;
+        document.getElementById('footer-text').textContent  = t.footer;
+        Object.entries(t.headings).forEach(([key,val]) => {
+          document.getElementById('hdr-'+key).textContent = val;
+        });
+        ['bandages','gauze','tape','wipes','ointment','tweezers','scissors','gloves','coldpack','ace','cpr','meds']
+          .forEach(type => {
+            document.getElementById('title-'+type).textContent = t[type].title;
+            document.getElementById('desc-'+type).textContent  = t[type].desc;
+          });
+      }
+
+      applyLang(currentLang);
+    });
+  </script>
+</body>
+</html>

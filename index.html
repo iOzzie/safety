@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safety</title>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --text: #333;
+      --card-bg: #fff;
+      --primary: #28a745;
+      --header-bg: #27ae60;
+      --aid: #28a745;
+      --aid-hover: #218c3d;
+      --fire: #c0392b;
+      --fire-hover: #a93226;
+    }
+    body.dark {
+      --bg: #2c3e50;
+      --text: #ecf0f1;
+      --card-bg: #34495e;
+      --primary: #2ecc71;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      text-align: center;
+      transition: background .3s, color .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Wave background canvas */
+    #wave-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    header {
+      width: 100%;
+      background: var(--header-bg);
+      color: white;
+      padding: 1rem 0;
+      position: sticky; top: 0; z-index: 1000;
+    }
+    header h1 {
+      margin: 0; font-size: 2rem;
+    }
+    main {
+      width: 100%;
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .btn {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      text-decoration: none;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform .3s, box-shadow .3s;
+      width: 100%;
+    }
+    .btn img.btn-icon {
+      display: block;
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      margin: 0 auto 1rem;
+    }
+    .btn span {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .btn-aid {
+      background: var(--aid);
+    }
+    .btn-aid:hover {
+      background: var(--aid-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    .btn-fire {
+      background: var(--fire);
+    }
+    .btn-fire:hover {
+      background: var(--fire-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    #controls {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      direction: ltr;
+      z-index: 1001;
+    }
+    .ctrl-btn {
+      background: var(--primary);
+      border: none;
+      color: white;
+      font-size: 1.25rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background .3s;
+    }
+    .ctrl-btn:hover {
+      background: #218c3d;
+    }
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 2rem 1rem 4rem;
+      font-size: 0.875rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="wave-bg"></canvas>
+
+  <header>
+    <h1 id="header-title">Safety</h1>
+  </header>
+
+  <main>
+    <div class="buttons">
+      <a id="btn-aid" href="first_aid.html" class="btn btn-aid">
+        <img src="images/first-aid-icon.png" alt="First Aid Icon" class="btn-icon">
+        <span>First Aid</span>
+      </a>
+      <a id="btn-fire" href="fire_extinguishers.html" class="btn btn-fire">
+        <img src="images/fire-extinguisher-icon.png" alt="Fire Extinguisher Icon" class="btn-icon">
+        <span>Fire Extinguishers</span>
+      </a>
+    </div>
+  </main>
+
+  <div id="controls">
+    <button id="theme-toggle" class="ctrl-btn" aria-label="Toggle theme">🌓</button>
+    <button id="lang-toggle"  class="ctrl-btn" aria-label="Toggle language">🌐</button>
+  </div>
+
+  <footer>
+    <div id="footer-text"></div>
+  </footer>
+
+  <script>
+    // Translations
+    const translations = {
+      en: {
+        dir: 'ltr', langAttr: 'en',
+        header: 'Safety',
+        aid: 'First Aid',
+        fire: 'Fire Extinguishers',
+        footer: '© 2025 UTAS (University of Technology and Applied Sciences Muscat)'
+      },
+      ar: {
+        dir: 'rtl', langAttr: 'ar',
+        header: 'السلامة',
+        aid: 'الإسعافات الأولية',
+        fire: 'طفايات الحريق',
+        footer: '© 2025 جامعة التقنية والعلوم التطبيقية مسقط'
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentLang = 'en';
+
+      const themeToggle = document.getElementById('theme-toggle');
+      const langToggle  = document.getElementById('lang-toggle');
+
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+      });
+
+      langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ar' : 'en';
+        applyLang(currentLang);
+      });
+
+      function applyLang(lang) {
+        const t = translations[lang];
+        document.documentElement.dir  = t.dir;
+        document.documentElement.lang = t.langAttr;
+        document.getElementById('header-title').textContent           = t.header;
+        document.getElementById('btn-aid').querySelector('span').textContent  = t.aid;
+        document.getElementById('btn-fire').querySelector('span').textContent = t.fire;
+        document.getElementById('footer-text').textContent            = t.footer;
+      }
+      applyLang(currentLang);
+
+      // Wavy background animation
+      const canvas = document.getElementById('wave-bg');
+      const ctx    = canvas.getContext('2d');
+      let width, height, phi = 0;
+
+      function resize() {
+        width  = canvas.width  = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // throttle timestamp
+    let lastTime = 0;
+
+    function drawWaves(timestamp) {
+    // schedule next frame immediately (even if hidden)
+    requestAnimationFrame(drawWaves);
+
+    // throttle to ~30fps
+    if (timestamp - lastTime < 1000 / 30) return;
+    lastTime = timestamp;
+
+    // skip drawing when tab is hidden
+    if (document.hidden) return;
+
+    // clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // pick monochrome wave colors based on theme
+    const isDark = document.body.classList.contains('dark');
+    const color1 = isDark
+        ? 'rgba(255,255,255,0.05)'
+        : 'rgba(0,0,0,0.05)';
+    const color2 = isDark
+        ? 'rgba(255,255,255,0.1)'
+        : 'rgba(0,0,0,0.1)';
+
+    // helper draws one sine wave
+    function wave(amplitude, phaseOffset, baseY, fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        // sample every 4px
+        for (let x = 0; x <= width; x += 4) {
+        const y = amplitude * Math.sin((x / width) * 2 * Math.PI + phi + phaseOffset)
+                + baseY;
+        ctx.lineTo(x, y);
+        }
+        ctx.lineTo(width, height);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // draw two overlapping waves
+    wave(20,       0,           height * 0.8,  color1);
+    wave(30, Math.PI / 2, height * 0.85, color2);
+
+    // advance phase slowly
+    phi += 0.0015;
+    }
+
+    // kick off the loop
+    requestAnimationFrame(drawWaves);
+    });
+  </script>
+</body>
+</html>

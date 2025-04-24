@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Types of Fire Extinguishers</title>
+  <style>
+    /* theme variables */
+    :root {
+      --bg: #f4f4f4;
+      --text: #333;
+      --card-bg: #fff;
+      --primary: #c0392b;
+      --header-bg: #c0392b;
+    }
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #eee;
+      --card-bg: #2e2e2e;
+      --primary: #e74c3c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html { scroll-behavior: smooth }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .3s, color .3s;
+    }
+    header {
+      position: relative;
+      background: var(--header-bg);
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .home-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: white;
+      background: transparent;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    .home-btn:hover {
+      opacity: 0.8;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card img {
+      display: block;
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+    .card-content {
+      padding: 1rem;
+      flex: 1;
+    }
+    .card-content h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+    .card-content p {
+      margin: .5rem 0 0;
+    }
+    .card:hover {
+    transform: scale(1.03);
+    /* keep your existing drop‑shadow on the box */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    /* add a solid outline */
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+    /* use filter to glow around that outline */
+    filter: drop-shadow(0 0 8px var(--primary));
+    }
+
+
+    footer {
+      position: relative;
+      text-align: center;
+      padding: 2rem 1rem 4rem;
+      font-size: .875rem;
+      color: #777;
+    }
+    #controls {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: .5rem;
+      direction: ltr;
+    }
+    .ctrl-btn {
+      background: var(--primary);
+      border: none;
+      color: white;
+      font-size: 1.25rem;
+      padding: .5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background .3s;
+    }
+    .ctrl-btn:hover {
+      background: #a93226;
+    }
+    /* Modal backdrop + blur */
+    .modal {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      z-index: 2000;
+    }
+    .modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      color: var(--text);
+      padding: 1.5rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideDown .3s ease forwards;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0 }
+      to   { transform: translateY(0);      opacity: 1 }
+    }
+    .modal-close {
+      position: absolute; top: .5rem; right: .75rem;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .modal-content img {
+        display: block;
+        width: 100%;
+        max-height: 300px;   /* ↑ increased from 200px */
+        object-fit: contain;
+        margin-bottom: 1rem;
+        }
+    .modal-content h3 {
+      margin: 1rem 0 .5rem;
+      color: var(--primary);
+    }
+    .modal-content ul {
+      list-style: disc inside;
+      margin: 0 0 1rem;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="home-btn" aria-label="Home">🏠</a>
+    <h1 id="header-title">Types of Fire Extinguishers</h1>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card" data-type="water">
+        <img src="images/water-extinguisher.png" alt="Water Extinguisher">
+        <div class="card-content">
+          <h2 id="title-water">Water Extinguisher</h2>
+          <p id="desc-water">Best for Class A fires (wood, paper, textiles). Not suitable for electrical or flammable liquid fires.</p>
+        </div>
+      </div>
+      <div class="card" data-type="foam">
+        <img src="images/foam-extinguisher.png" alt="Foam Extinguisher">
+        <div class="card-content">
+          <h2 id="title-foam">Foam Extinguisher</h2>
+          <p id="desc-foam">Effective on Class A and B fires (flammable liquids). Creates a blanket to smother flames.</p>
+        </div>
+      </div>
+      <div class="card" data-type="dry">
+        <img src="images/dry-powder-extinguisher.png" alt="Dry Powder Extinguisher">
+        <div class="card-content">
+          <h2 id="title-dry">Dry Powder Extinguisher</h2>
+          <p id="desc-dry">Multi purpose (A, B, C). Leaves residue and is not ideal for enclosed spaces or electronics.</p>
+        </div>
+      </div>
+      <div class="card" data-type="co2">
+        <img src="images/co2-extinguisher.png" alt="Carbon Dioxide Extinguisher">
+        <div class="card-content">
+          <h2 id="title-co2">Carbon Dioxide (CO₂) Extinguisher</h2>
+          <p id="desc-co2">Ideal for Class B and electrical fires. Leaves no residue, but has a limited range and cool down effect.</p>
+        </div>
+      </div>
+      <div class="card" data-type="wet">
+        <img src="images/wet-chemical-extinguisher.png" alt="Wet Chemical Extinguisher">
+        <div class="card-content">
+          <h2 id="title-wet">Wet Chemical Extinguisher</h2>
+          <p id="desc-wet">Designed for Class F fires (cooking oils and fats). Creates a cooling foam to prevent re flash.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div id="controls">
+      <button id="theme-toggle" class="ctrl-btn" aria-label="Toggle theme">🌓</button>
+      <button id="lang-toggle" class="ctrl-btn" aria-label="Toggle language">🌐</button>
+    </div>
+    <div id="footer-text">© 2025 UTAS (University of Technology and Applied Sciences Muscat)</div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img id="modal-img" src="" alt="">
+      <h2 id="modal-title"></h2>
+      <p id="modal-text"></p>
+
+      <h3 id="hdr-classification"></h3>
+      <ul id="modal-classification"></ul>
+
+      <h3 id="hdr-agent"></h3>
+      <ul id="modal-agent"></ul>
+
+      <h3 id="hdr-capacity"></h3>
+      <ul id="modal-capacity"></ul>
+
+      <h3 id="hdr-usage"></h3>
+      <ul id="modal-usage"></ul>
+
+      <h3 id="hdr-safety"></h3>
+      <ul id="modal-safety"></ul>
+
+      <h3 id="hdr-maintenance"></h3>
+      <ul id="modal-maintenance"></ul>
+
+      <h3 id="hdr-certifications"></h3>
+      <ul id="modal-certifications"></ul>
+
+      <h3 id="hdr-installation"></h3>
+      <ul id="modal-installation"></ul>
+
+      <h3 id="hdr-ergonomics"></h3>
+      <ul id="modal-ergonomics"></ul>
+
+      <h3 id="hdr-environment"></h3>
+      <ul id="modal-environment"></ul>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        dir: 'ltr', langAttr: 'en',
+        header: 'Types of Fire Extinguishers',
+        footer: '© 2025 UTAS (University of Technology and Applied Sciences Muscat)',
+        headings: {
+          classification: 'Classification & Rating',
+          agent: 'Extinguishing Agent & Mechanism',
+          capacity: 'Capacity & Performance Specs',
+          usage: 'How to Use (PASS Technique)',
+          safety: 'Safety Features & Indicators',
+          maintenance: 'Maintenance & Inspection',
+          certifications: 'Certifications & Compliance',
+          installation: 'Installation & Accessibility',
+          ergonomics: 'Ergonomics & Durability',
+          environment: 'Environment & Health Considerations'
+        },
+        water: {
+          title: 'Water Extinguisher',
+          desc: 'Best for Class A fires (wood, paper, textiles). Not suitable for electrical or flammable liquid fires.',
+          extra: 'Water extinguishers cool Class A burning materials to prevent re-ignition.',
+          classification: ['Covers Class A fires.', 'UL rating: 2A'],
+          agent: ['Agent: Water', 'Mechanism: Cools fire by absorbing heat'],
+          capacity: ['Capacity: 6 L (1.6 US gal)', 'Discharge time: ~55 s', 'Range: ~4 m'],
+          usage: ['Pull the pin', 'Aim at the base of the fire', 'Squeeze the handle', 'Sweep side‑to‑side'],
+          safety: ['Pressure gauge (in‑range vs. low)', 'Safety pin with tamper seal', 'Heat‑resistant hose design'],
+          maintenance: ['Monthly visual check (seal intact, no dents)', 'Annual professional inspection or hydrostatic test'],
+          certifications: ['UL Listed', 'Complies with NFPA 10 (US)'],
+          installation: ['Mount bracket at 1.5 m above floor', 'Visible signage and color contrast', 'Ideal locations: exits, kitchens'],
+          ergonomics: ['Steel cylinder with corrosion‑resistant finish', 'Easy‑grip handle'],
+          environment: ['Non‑toxic', 'Large water volume requires clean‑up']
+        },
+        foam: {
+          title: 'Foam Extinguisher',
+          desc: 'Effective on Class A and B fires (flammable liquids). Creates a blanket to smother flames.',
+          extra: 'Foam agents smother and cool flammable liquids.',
+          classification: ['Covers Class A & B fires', 'UL rating: 2A:10B:C'],
+          agent: ['Agent: AFFF foam', 'Mechanism: Smothers and cools fire'],
+          capacity: ['Capacity: 9 L (2.4 US gal)', 'Discharge time: ~25 s', 'Range: ~3 m'],
+          usage: ['Pull the pin', 'Aim at the base', 'Squeeze handle', 'Sweep side‑to‑side'],
+          safety: ['Pressure gauge', 'Tamper‑seal pin', 'Foam nozzle'],
+          maintenance: ['Monthly visual check', 'Annual service & hydrotest'],
+          certifications: ['UL & FM approved', 'Meets EN3 (EU)'],
+          installation: ['Mount 1.5 m high', 'Near flammable‑liquid storage'],
+          ergonomics: ['Medium‑weight handle', 'Aluminum cylinder option'],
+          environment: ['Biodegradable foam options', 'Residue clean‑up required']
+        },
+        dry: {
+          title: 'Dry Powder Extinguisher',
+          desc: 'Multi purpose (A, B, C). Leaves residue and is not ideal for enclosed spaces or electronics.',
+          extra: 'Monoammonium phosphate powder interrupts the chemical reaction.',
+          classification: ['Covers Class A, B & C', 'UL rating: 4A:80B:C'],
+          agent: ['Agent: Monoammonium phosphate', 'Mechanism: Interrupts chemical chain reaction'],
+          capacity: ['Capacity: 2 kg (5 lb)', 'Discharge time: ~6 s', 'Range: ~3 m'],
+          usage: ['Pull the pin', 'Aim low', 'Squeeze lever', 'Sweep side‑to‑side'],
+          safety: ['Pressure gauge', 'Rubber discharge horn'],
+          maintenance: ['Monthly visual check', 'Annual professional inspection'],
+          certifications: ['UL & CE marked', 'NFPA 10 compliant'],
+          installation: ['Mount on wall bracket', 'Avoid enclosed electronics cabinets'],
+          ergonomics: ['Compact cylinder', 'Lightweight for easy carry'],
+          environment: ['Leaves corrosive residue', 'Cleanup mandatory']
+        },
+        co2: {
+          title: 'Carbon Dioxide (CO₂) Extinguisher',
+          desc: 'Ideal for Class B and electrical fires. Leaves no residue, but has a limited range and cool down effect.',
+          extra: 'CO₂ displaces oxygen and cools surfaces with no residue.',
+          classification: ['Covers Class B & electrical', 'UL rating: 10B:C'],
+          agent: ['Agent: Carbon dioxide gas', 'Mechanism: Oxygen displacement and surface cooling'],
+          capacity: ['Capacity: 2 kg', 'Discharge time: ~8 s', 'Range: ~1.5 m'],
+          usage: ['Pull the pin', 'Aim at the base', 'Squeeze handle', 'Sweep side‑to‑side'],
+          safety: ['No gauge on some models', 'Cold discharge horn (frost risk)'],
+          maintenance: ['Monthly check', 'Annual hydrostatic test'],
+          certifications: ['UL & FM listed', 'EN3 certified'],
+          installation: ['Mount on wall bracket at 1.5 m', 'Keep clear of obstructions'],
+          ergonomics: ['Steel cylinder', 'Insulated horn'],
+          environment: ['Zero‑residue', 'Safe for electronics']
+        },
+        wet: {
+          title: 'Wet Chemical Extinguisher',
+          desc: 'Designed for Class F fires (cooking oils and fats). Creates a cooling foam to prevent re flash.',
+          extra: 'Potassium acetate wet agent saponifies hot oils.',
+          classification: ['Covers Class F (K)', 'UL rating: Notated K'],
+          agent: ['Agent: Potassium acetate solution', 'Mechanism: Saponification and cooling'],
+          capacity: ['Capacity: 5 L', 'Discharge time: ~30 s', 'Range: ~1 m'],
+          usage: ['Pull the pin', 'Aim at the base of the oil fire', 'Squeeze handle', 'Sweep gently'],
+          safety: ['Pressure gauge', 'Heat‑resistant nozzle'],
+          maintenance: ['Monthly visual check', 'Annual service & refill'],
+          certifications: ['EN3 & BS 5306‑3', 'Meets NFPA 10 (Class K)'],
+          installation: ['Mount near kitchen at 1.5 m', 'Avoid freezing temperatures'],
+          ergonomics: ['Easy‑grip handle', 'Aluminum cylinder option'],
+          environment: ['Eco‑friendly agent', 'Minimal cleanup']
+        }
+      },
+      ar: {
+        dir: 'rtl',
+        langAttr: 'ar',
+        header: 'أنواع طفايات الحريق',
+        footer: '© 2025 جامعة التقنية والعلوم التطبيقية مسقط',
+        headings: {
+            classification:   'التصنيف والتقييم',
+            agent:            'عامل الإخماد وطريقة العمل',
+            capacity:         'السعة ومواصفات الأداء',
+            usage:            'طريقة الاستخدام (تقنية PASS)',
+            safety:           'ميزات السلامة والمؤشرات',
+            maintenance:      'الصيانة والفحص',
+            certifications:   'الاعتمادات والموافقات',
+            installation:     'التركيب وإمكانية الوصول',
+            ergonomics:       'سهولة الحمل والمتانة',
+            environment:      'الاعتبارات البيئية والصحية'
+        },
+        water: {
+            title:        'طفاية الماء',
+            desc:         'مناسبة فقط لحرائق الفئة A (الخشب، الورق، الأقمشة). غير مخصصة للحرائق الكهربائية أو السوائل القابلة للاشتعال.',
+            extra:        'تبرد طفايات الماء المواد المشتعلة من الفئة A لمنع إعادة الاشتعال.',
+            classification:['يغطي حرائق الفئة A فقط.', 'تصنيف UL: 2A'],
+            agent:         ['عامل الإخماد: ماء', 'الآلية: التبريد بامتصاص الحرارة'],
+            capacity:      ['السعة: 6 لتر (1.6 غالون أمريكي)', 'زمن التفريغ: ~55 ث', 'المدى: ~4 م'],
+            usage:         ['اسحب الدبوس', 'وجّه الفوهة نحو قاعدة النار', 'اضغط المقبض', 'امسح من جانب إلى جانب'],
+            safety:        ['مقياس الضغط (ضمن النطاق)', 'دبوس أمان مع ختم مانع للتلاعب', 'خرطوم مقاوم للحرارة'],
+            maintenance:   ['فحص بصري شهريًا (تأكد من عدم وجود خدوش أو تآكل)', 'فحص مهني سنوي أو اختبار هيدرواستاتيكي'],
+            certifications:['معتمد UL', 'مطابق NFPA 10 (الولايات المتحدة)'],
+            installation:  ['ركّب الحامل على ارتفاع 1.5 م', 'وفر لافتات واضحة وتباين ألوان', 'مواقع مثالية: المداخل والمطابخ'],
+            ergonomics:    ['أسطوانة فولاذية مقاومة للتآكل', 'مقبض سهل الإمساك'],
+            environment:   ['غير سام', 'يتطلب تنظيف الماء المتسرب بعد الاستخدام']
+        },
+        foam: {
+            title:        'طفاية رغوية',
+            desc:         'فعّالة في إخماد حرائق الفئة A و B (السوائل القابلة للاشتعال). تشكّل طبقة رغوية تخنق النيران.',
+            extra:        'تخنق رغوة AFFF الوقود القابل للاشتعال وتبرد السطح.',
+            classification:['يغطي حرائق الفئة A و B', 'تصنيف UL: 2A:10B:C'],
+            agent:         ['عامل الإخماد: رغوة AFFF', 'الآلية: الخنق والتبريد'],
+            capacity:      ['السعة: 9 لتر (2.4 غالون أمريكي)', 'زمن التفريغ: ~25 ث', 'المدى: ~3 م'],
+            usage:         ['اسحب الدبوس', 'وجّه الفوهة نحو قاعدة النار', 'اضغط المقبض', 'امسح من جانب إلى جانب'],
+            safety:        ['مقياس الضغط', 'دبوس مانع للتلاعب', 'فوهة رغوية مخصصة'],
+            maintenance:   ['فحص بصري شهريًا', 'خدمة سنوية واختبار هيدرواستاتيكي'],
+            certifications:['معتمد UL & FM', 'مطابق المعيار الأوروبي EN3'],
+            installation:  ['ركّب على ارتفاع 1.5 م', 'قرب مخازن السوائل القابلة للاشتعال'],
+            ergonomics:    ['مقبض خفيف الوزن', 'خيار أسطوانة ألومنيوم'],
+            environment:   ['رغوة قابلة للتحلل', 'يتطلب تنظيف البقايا بعد الاستخدام']
+        },
+        dry: {
+            title:        'طفاية المسحوق الجاف',
+            desc:         'متعددة الأغراض للفئات A و B و C. تترك رواسب وقد لا تكون مثالية للأماكن المغلقة أو الإلكترونيات.',
+            extra:        'تعمل بودرة فوسفات الأمونيوم الأحادي على تعطيل التفاعل الكيميائي للحريق.',
+            classification:['يغطي فئات A و B و C', 'تصنيف UL: 4A:80B:C'],
+            agent:         ['عامل الإخماد: مسحوق ABC', 'الآلية: مقاطعة التفاعل الكيميائي'],
+            capacity:      ['السعة: 2 كجم (5 رطل)', 'زمن التفريغ: ~6 ث', 'المدى: ~3 م'],
+            usage:         ['اسحب الدبوس', 'وجّه الفوهة للأسفل نحو قاعدة النار', 'اضغط المقبض', 'امسح من جانب إلى جانب'],
+            safety:        ['مقياس الضغط', 'فوهة مطاطية لتجنب الارتداد'],
+            maintenance:   ['فحص بصري شهريًا', 'فحص مهني سنوي'],
+            certifications:['معتمد UL & CE', 'مطابق NFPA 10'],
+            installation:  ['ركّب على الحائط باستخدام الحامل المرفق', 'تجنب الأماكن المغلقة حول الإلكترونيات'],
+            ergonomics:    ['أسطوانة مدمجة', 'خفيفة الوزن لحمل أسهل'],
+            environment:   ['تترك رواسب كيميائية', 'يتطلب تنظيف دقيق بعد الاستخدام']
+        },
+        co2: {
+            title:        'طفاية ثاني أكسيد الكربون (CO₂)',
+            desc:         'مثالية لحرائق الفئة B والحرائق الكهربائية. لا تترك رواسب لكن مدى فعاليتها محدود.',
+            extra:        'يعمل ثاني أكسيد الكربون على استبدال الأكسجين وتبريد السطح دون ترك بقايا.',
+            classification:['يغطي فئة B والحرائق الكهربائية', 'تصنيف UL: 10B:C'],
+            agent:         ['عامل الإخماد: غاز CO₂', 'الآلية: خنق النار وإزالة الحرية'],
+            capacity:      ['السعة: 2 كجم', 'زمن التفريغ: ~8 ث', 'المدى: ~1.5 م'],
+            usage:         ['اسحب الدبوس', 'وجّه الفوهة نحو قاعدة النار', 'اضغط المقبض', 'امسح برفق'],
+            safety:        ['لا يحتوي بعض الطرازات على مقياس ضغط', 'فوهة باردة (احذر الصقيع)'],
+            maintenance:   ['فحص بصري شهريًا', 'اختبار هيدرواستاتيكي سنوي'],
+            certifications:['معتمد UL & FM', 'مطابق EN3'],
+            installation:  ['ركّب على ارتفاع 1.5 م بعيدًا عن العوائق', 'وفر مساحة كافية للمدى القصير'],
+            ergonomics:    ['أسطوانة فولاذية متينة', 'فوهة معزولة لسلامة اليد'],
+            environment:   ['لا تترك رواسب', 'آمن للأجهزة الإلكترونية']
+        },
+        wet: {
+            title:        'طفاية السائل الكيميائي',
+            desc:         'مصممة لحرائق الفئة F (زيوت الطبخ والدهون). تنتج رغوة تبريد لمنع إعادة الاشتعال.',
+            extra:        'يتفاعل محلول أسيتات البوتاسيوم مع الزيوت الساخنة لتكوين رغوة صابونية تعزل الأكسجين.',
+            classification:['يغطي فئة F (K)', 'تصنيف UL: K'],
+            agent:         ['عامل الإخماد: محلول أسيتات البوتاسيوم', 'الآلية: الصابونية والتبريد'],
+            capacity:      ['السعة: 5 لتر', 'زمن التفريغ: ~30 ث', 'المدى: ~1 م'],
+            usage:         ['اسحب الدبوس', 'وجّه الفوهة نحو قاعدة النار الزيتية', 'اضغط المقبض', 'امسح برفق'],
+            safety:        ['مقياس الضغط', 'فوهة مقاومة للحرارة'],
+            maintenance:   ['فحص بصري شهريًا', 'خدمة سنوية وإعادة تعبئة'],
+            certifications:['مطابق EN3 & BS 5306‑3', 'مطابق NFPA 10 (Class K)'],
+            installation:  ['ركّب قرب أماكن الطهي على ارتفاع مناسب', 'تجنب درجات الحرارة المنخفضة جدًا'],
+            ergonomics:    ['مقبض مريح وسهل الحمل', 'خيار أسطوانة ألومنيوم خفيف'],
+            environment:   ['صديق للبيئة', 'تنظيف سهل بعد التفريغ']
+        }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentLang = 'en';
+
+      // reveal cards on scroll
+      document.querySelectorAll('.card').forEach(card => {
+        const obs = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        obs.observe(card);
+      });
+
+      // theme toggle
+      document.getElementById('theme-toggle')
+        .addEventListener('click', () => document.body.classList.toggle('dark'));
+
+      // language toggle
+      document.getElementById('lang-toggle')
+        .addEventListener('click', () => {
+          currentLang = currentLang === 'en' ? 'ar' : 'en';
+          applyLang(currentLang);
+        });
+
+      // modal logic
+      const modal    = document.getElementById('modal');
+      const mImg     = document.getElementById('modal-img');
+      const mTitle   = document.getElementById('modal-title');
+      const mText    = document.getElementById('modal-text');
+      const closeBtn = document.querySelector('.modal-close');
+
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const type = card.dataset.type;
+          const t    = translations[currentLang][type];
+
+          mImg.src           = card.querySelector('img').src;
+          mImg.alt           = t.title;
+          mTitle.textContent = t.title;
+          mText.textContent  = t.extra;
+
+          const fill = (id, arr) => {
+            document.getElementById(id).innerHTML =
+              arr.map(i => `<li>${i}</li>`).join('');
+          };
+          fill('modal-classification', t.classification);
+          fill('modal-agent',          t.agent);
+          fill('modal-capacity',       t.capacity);
+          fill('modal-usage',          t.usage);
+          fill('modal-safety',         t.safety);
+          fill('modal-maintenance',    t.maintenance);
+          fill('modal-certifications', t.certifications);
+          fill('modal-installation',   t.installation);
+          fill('modal-ergonomics',     t.ergonomics);
+          fill('modal-environment',    t.environment);
+
+          modal.classList.add('show');
+        });
+      });
+
+      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+      modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('show');
+      });
+
+      function applyLang(lang) {
+        const t = translations[lang];
+        document.documentElement.dir  = t.dir;
+        document.documentElement.lang = t.langAttr;
+        document.getElementById('header-title').textContent   = t.header;
+        document.getElementById('footer-text').textContent    = t.footer;
+        // headings
+        Object.entries(t.headings).forEach(([key,val])=>{
+          document.getElementById('hdr-'+key).textContent = val;
+        });
+        // cards
+        ['water','foam','dry','co2','wet'].forEach(type=>{
+          const cardT = t[type];
+          document.getElementById('title-'+type).textContent = cardT.title;
+          document.getElementById('desc-'+type).textContent  = cardT.desc;
+        });
+      }
+
+      applyLang(currentLang);
+    });
+  </script>
+</body>
+</html>
