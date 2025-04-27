@@ -190,14 +190,6 @@
           <p id="desc-cpr">Barrier device with one-way valve for rescue breaths.</p>
         </div>
       </div>
-      <!-- Pain relievers & antihistamine -->
-      <div class="card" data-type="meds">
-        <img src="images/pain-relievers.png" alt="Pain Relievers & Antihistamine">
-        <div class="card-content">
-          <h2 id="title-meds">Pain Relievers & Antihistamine</h2>
-          <p id="desc-meds">Ibuprofen/acetaminophen and antihistamine tablets.</p>
-        </div>
-      </div>
     </div>
   </main>
 
@@ -412,21 +404,6 @@
           storage:      ['First aid kit'],
           ergonomics:   ['Compact','Adjustable fit'],
           disposal:     ['Dispose as medical waste']
-        },
-        meds: {
-          title: 'Pain Relievers',
-          desc:  'Ibuprofen/acetaminophen tablets.',
-          extra: 'Manage pain, fever, and allergic reactions.',
-          purpose:      ['Reduce pain and fever','Relieve allergic symptoms'],
-          composition:  ['200mg ibuprofen', '10mg loratadine'],
-          packaging:    ['Blister pack','24-month shelf life'],
-          usage:        ['Take with water','Follow dosage instructions'],
-          safety:       ['Do not exceed recommended dose','Consult doctor if pregnant'],
-          maintenance:  ['Check expiration regularly'],
-          certifications:['FDA approved'],
-          storage:      ['Cool, dry place'],
-          ergonomics:   ['Portable blister pack'],
-          disposal:     ['Dispose per local regulations']
         }
       },
       ar: {
@@ -609,21 +586,6 @@
           storage:      ['في حقيبة الإسعافات الأولية'],
           ergonomics:   ['حجم مضغوط','يلائم معظم الوجوه'],
           disposal:     ['يتخلص كنفايات طبية']
-        },
-        meds: {
-          title: 'مسكنات',
-          desc:  'أقراص إيبوبروفين/أسيتامينوفين.',
-          extra: 'لتخفيف الألم والحمى والحساسية.',
-          purpose:      ['تخفيف الألم والحمى','تخفيف أعراض الحساسية'],
-          composition:  ['200 ملغ إيبوبروفين','10 ملغ لوراتادين'],
-          packaging:    ['علبة بها 20 قرص','عمر صلاحية 24 شهرًا'],
-          usage:        ['تؤخذ مع الماء','اتبع الجرعة الموصى بها'],
-          safety:       ['لا تتجاوز الجرعة','استشر الطبيب للحامل'],
-          maintenance:  ['تحقق من تاريخ الصلاحية'],
-          certifications:['معتمد FDA'],
-          storage:      ['مكان جاف وبارد'],
-          ergonomics:   ['علبة قابلة للحمل','مقصّات منفصلة لكل قرص'],
-          disposal:     ['اتبع اللوائح المحلية للتخلص']
         }
       }
     };
@@ -684,7 +646,7 @@
 
         /* list of cards we actually show (ointment removed) */
         ['bandages','gauze','tape','wipes','tweezers','scissors',
-         'gloves','coldpack','ace','cpr','meds']
+         'gloves','coldpack','ace','cpr',]
         .forEach(type=>{
           document.getElementById('title-'+type).textContent = t[type].title;
           document.getElementById('desc-'+type ).textContent = t[type].desc;
