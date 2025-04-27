@@ -10,7 +10,7 @@
       --bg: #f4f4f4;
       --text: #333;
       --card-bg: #fff;
-      --primary: #28a745;      /* green primary */
+      --primary: #28a745;          /* green primary */
       --header-bg: #27ae60;
     }
     body.dark {
@@ -35,116 +35,71 @@
       padding: 1rem 0;
       text-align: center;
     }
-    .home-btn {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      color: white;
-      background: transparent;
-      border: none;
-      text-decoration: none;
-      cursor: pointer;
-      outline: 2px solid #fff;
-      outline-offset: 3px;
-      border-radius: 4px;
+    .home-btn{
+      position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+      font-size:1.5rem;color:#fff;background:transparent;border:none;
+      text-decoration:none;cursor:pointer;
+      outline:2px solid #fff;outline-offset:3px;border-radius:4px;
     }
-    .home-btn:hover {
-      opacity: 0.8;
+    .home-btn:hover{opacity:.8}
+
+    main{max-width:960px;margin:2rem auto;padding:0 1rem}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.5rem;
     }
-    main {
-      max-width: 960px; margin: 2rem auto; padding: 0 1rem;
+    .card{
+      background:var(--card-bg);border-radius:8px;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+      overflow:hidden;display:flex;flex-direction:column;
+      cursor:pointer;opacity:0;transform:translateY(20px);
+      transition:opacity .6s ease,transform .6s ease;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+    .card.visible{opacity:1;transform:translateY(0)}
+    .card img{display:block;width:100%;max-height:200px;object-fit:contain;margin:0 auto}
+    .card-content{padding:1rem;flex:1}
+    .card-content h2{margin:0;font-size:1.25rem;color:var(--primary)}
+    .card-content p{margin:.5rem 0 0}
+    .card:hover{
+      transform:scale(1.03);
+      box-shadow:0 4px 15px rgba(0,0,0,.2);
+      outline:2px solid var(--primary);outline-offset:4px;
+      filter:drop-shadow(0 0 8px var(--primary));
     }
-    .card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .6s ease, transform .6s ease;
+    footer{position:relative;text-align:center;padding:2rem 1rem 4rem;font-size:.875rem;color:#777}
+
+    #controls{
+      position:fixed;bottom:1rem;right:1rem;display:flex;gap:.5rem;direction:ltr;
     }
-    .card.visible {
-      opacity: 1; transform: translateY(0);
+    .ctrl-btn{
+      background:var(--primary);border:none;color:#fff;font-size:1.25rem;
+      padding:.5rem;border-radius:50%;cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,.3);transition:background .3s;
     }
-    .card img {
-      display: block; width: 100%; max-height: 200px;
-      object-fit: contain; margin: 0 auto;
+    .ctrl-btn:hover{background:#218c3d}
+
+    /* modal */
+    .modal{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,.6);backdrop-filter:blur(5px);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:2000;
     }
-    .card-content { padding: 1rem; flex: 1 }
-    .card-content h2 {
-      margin-top: 0; font-size: 1.25rem; color: var(--primary)
+    .modal.show{opacity:1;pointer-events:auto}
+    .modal-content{
+      background:var(--card-bg);color:var(--text);
+      padding:1.5rem;border-radius:8px;width:90%;max-width:600px;max-height:90vh;
+      overflow-y:auto;position:relative;animation:slideDown .3s ease forwards;
     }
-    .card-content p { margin: .5rem 0 0 }
-    .card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      outline: 2px solid var(--primary);
-      outline-offset: 4px;
-      filter: drop-shadow(0 0 8px var(--primary));
+    @keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-close{
+      position:absolute;top:.5rem;right:.75rem;background:transparent;border:none;
+      font-size:1.5rem;cursor:pointer;color:var(--text);
     }
-    footer {
-      position: relative; text-align: center;
-      padding: 2rem 1rem 4rem; font-size: .875rem; color: #777;
-    }
-    #controls {
-      position: fixed; bottom:1rem; right:1rem;
-      display:flex; gap:.5rem; direction:ltr;
-    }
-    .ctrl-btn {
-      background:var(--primary); border:none;
-      color:white; font-size:1.25rem; padding:.5rem;
-      border-radius:50%; cursor:pointer;
-      box-shadow:0 2px 6px rgba(0,0,0,0.3);
-      transition:background .3s;
-    }
-    .ctrl-btn:hover { background:#218c3d }
-    .modal {
-      position:fixed; top:0; left:0;
-      width:100%; height:100%;
-      background:rgba(0,0,0,0.6);
-      backdrop-filter:blur(5px);
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; pointer-events:none;
-      transition:opacity .3s ease;
-      z-index:2000;
-    }
-    .modal.show { opacity:1; pointer-events:auto }
-    .modal-content {
-      background:var(--card-bg); color:var(--text);
-      padding:1.5rem; border-radius:8px;
-      width:90%; max-width:600px; max-height:90vh;
-      overflow-y:auto; position:relative;
-      animation:slideDown .3s ease forwards;
-    }
-    @keyframes slideDown {
-      from {transform:translateY(-20px);opacity:0}
-      to   {transform:translateY(0);opacity:1}
-    }
-    .modal-close {
-      position:absolute; top:.5rem; right:.75rem;
-      background:transparent; border:none;
-      font-size:1.5rem; cursor:pointer; color:var(--text);
-    }
-    .modal-content img {
-      display:block; width:100%; max-height:300px;
-      object-fit:contain; margin-bottom:1rem;
-    }
-    .modal-content h3 {
-      margin:1rem 0 .5rem; color:var(--primary);
-    }
-    .modal-content ul {
-      list-style:disc inside; margin:0 0 1rem; padding:0;
-    }
+    .modal-content img{display:block;width:100%;max-height:300px;object-fit:contain;margin-bottom:1rem}
+    .modal-content h3{margin:1rem 0 .5rem;color:var(--primary)}
+    .modal-content ul{list-style:disc inside;margin:0 0 1rem;padding:0}
   </style>
 </head>
 <body>
@@ -155,6 +110,7 @@
 
   <main>
     <div class="grid">
+      <!-- Adhesive Bandages -->
       <div class="card" data-type="bandages">
         <img src="images/adhesive-bandages.png" alt="Adhesive Bandages">
         <div class="card-content">
@@ -162,6 +118,7 @@
           <p id="desc-bandages">Assorted sterile bandages for minor cuts and scrapes.</p>
         </div>
       </div>
+      <!-- Sterile Gauze Pads -->
       <div class="card" data-type="gauze">
         <img src="images/gauze-pads.png" alt="Gauze Pads">
         <div class="card-content">
@@ -169,6 +126,7 @@
           <p id="desc-gauze">Various sizes of absorbent sterile gauze pads.</p>
         </div>
       </div>
+      <!-- Medical Adhesive Tape -->
       <div class="card" data-type="tape">
         <img src="images/adhesive-tape.png" alt="Medical Adhesive Tape">
         <div class="card-content">
@@ -176,6 +134,7 @@
           <p id="desc-tape">Hypoallergenic tape to secure dressings and gauze.</p>
         </div>
       </div>
+      <!-- Antiseptic Wipes -->
       <div class="card" data-type="wipes">
         <img src="images/antiseptic-wipes.png" alt="Antiseptic Wipes">
         <div class="card-content">
@@ -183,13 +142,7 @@
           <p id="desc-wipes">Alcohol or povidone-iodine wipes to clean skin.</p>
         </div>
       </div>
-      <div class="card" data-type="ointment">
-        <img src="images/antibiotic-ointment.png" alt="Antibiotic Ointment">
-        <div class="card-content">
-          <h2 id="title-ointment">Antibiotic Ointment</h2>
-          <p id="desc-ointment">Topical antibiotic to prevent infection in wounds.</p>
-        </div>
-      </div>
+      <!-- Tweezers -->
       <div class="card" data-type="tweezers">
         <img src="images/tweezers.png" alt="Tweezers">
         <div class="card-content">
@@ -197,13 +150,15 @@
           <p id="desc-tweezers">Stainless-steel tweezers for splinter removal.</p>
         </div>
       </div>
+      <!-- Blunt Tip Scissors -->
       <div class="card" data-type="scissors">
         <img src="images/scissors-blunt.png" alt="Blunt Tip Scissors">
         <div class="card-content">
           <h2 id="title-scissors">Blunt Tip Scissors</h2>
-          <p id="desc-scissors">Angled, blunt-tip scissors for safely cutting dressings.</p>
+          <p id="desc-scissors">Angled scissors for safely cutting dressings.</p>
         </div>
       </div>
+      <!-- Disposable Gloves -->
       <div class="card" data-type="gloves">
         <img src="images/disposable-gloves.png" alt="Disposable Gloves">
         <div class="card-content">
@@ -211,6 +166,7 @@
           <p id="desc-gloves">Nitrile or vinyl gloves for hygiene and protection.</p>
         </div>
       </div>
+      <!-- Instant Cold Pack -->
       <div class="card" data-type="coldpack">
         <img src="images/instant-cold-pack.png" alt="Instant Cold Pack">
         <div class="card-content">
@@ -218,13 +174,15 @@
           <p id="desc-coldpack">Single-use cold pack for reducing swelling.</p>
         </div>
       </div>
+      <!-- Elastic (ACE) Bandage -->
       <div class="card" data-type="ace">
         <img src="images/ace-bandage.png" alt="Elastic ACE Bandage">
         <div class="card-content">
           <h2 id="title-ace">Elastic (ACE) Bandage</h2>
-          <p id="desc-ace">Adjustable compression bandage for sprains and strains.</p>
+          <p id="desc-ace">Compression bandage for sprains and strains.</p>
         </div>
       </div>
+      <!-- CPR Face Shield -->
       <div class="card" data-type="cpr">
         <img src="images/cpr-mask.png" alt="CPR Face Shield">
         <div class="card-content">
@@ -232,11 +190,12 @@
           <p id="desc-cpr">Barrier device with one-way valve for rescue breaths.</p>
         </div>
       </div>
+      <!-- Pain relievers & antihistamine -->
       <div class="card" data-type="meds">
         <img src="images/pain-relievers.png" alt="Pain Relievers & Antihistamine">
         <div class="card-content">
           <h2 id="title-meds">Pain Relievers & Antihistamine</h2>
-          <p id="desc-meds">Ibuprofen/acetaminophen and an antihistamine tablet pack.</p>
+          <p id="desc-meds">Ibuprofen/acetaminophen and antihistamine tablets.</p>
         </div>
       </div>
     </div>
@@ -258,35 +217,16 @@
       <h2 id="modal-title"></h2>
       <p id="modal-text"></p>
 
-      <h3 id="hdr-purpose"></h3>
-      <ul id="modal-purpose"></ul>
-
-      <h3 id="hdr-composition"></h3>
-      <ul id="modal-composition"></ul>
-
-      <h3 id="hdr-packaging"></h3>
-      <ul id="modal-packaging"></ul>
-
-      <h3 id="hdr-usage"></h3>
-      <ul id="modal-usage"></ul>
-
-      <h3 id="hdr-safety"></h3>
-      <ul id="modal-safety"></ul>
-
-      <h3 id="hdr-maintenance"></h3>
-      <ul id="modal-maintenance"></ul>
-
-      <h3 id="hdr-certifications"></h3>
-      <ul id="modal-certifications"></ul>
-
-      <h3 id="hdr-storage"></h3>
-      <ul id="modal-storage"></ul>
-
-      <h3 id="hdr-ergonomics"></h3>
-      <ul id="modal-ergonomics"></ul>
-
-      <h3 id="hdr-disposal"></h3>
-      <ul id="modal-disposal"></ul>
+      <h3 id="hdr-purpose"></h3><ul id="modal-purpose"></ul>
+      <h3 id="hdr-composition"></h3><ul id="modal-composition"></ul>
+      <h3 id="hdr-packaging"></h3><ul id="modal-packaging"></ul>
+      <h3 id="hdr-usage"></h3><ul id="modal-usage"></ul>
+      <h3 id="hdr-safety"></h3><ul id="modal-safety"></ul>
+      <h3 id="hdr-maintenance"></h3><ul id="modal-maintenance"></ul>
+      <h3 id="hdr-certifications"></h3><ul id="modal-certifications"></ul>
+      <h3 id="hdr-storage"></h3><ul id="modal-storage"></ul>
+      <h3 id="hdr-ergonomics"></h3><ul id="modal-ergonomics"></ul>
+      <h3 id="hdr-disposal"></h3><ul id="modal-disposal"></ul>
     </div>
   </div>
 
@@ -691,85 +631,65 @@
     document.addEventListener('DOMContentLoaded', () => {
       let currentLang = 'en';
 
-      // reveal cards
+      /* reveal cards */
       document.querySelectorAll('.card').forEach(card => {
         const obs = new IntersectionObserver(entries => {
           entries.forEach(e => {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible');
-              obs.unobserve(e.target);
-            }
+            if (e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
           });
-        }, { threshold: 0.1 });
+        },{threshold:.1});
         obs.observe(card);
       });
 
-      // theme toggle
-      document.getElementById('theme-toggle')
-        .addEventListener('click', () => document.body.classList.toggle('dark'));
+      /* theme toggle */
+      document.getElementById('theme-toggle').addEventListener('click',()=>document.body.classList.toggle('dark'));
 
-      // language toggle
-      document.getElementById('lang-toggle')
-        .addEventListener('click', () => {
-          currentLang = currentLang === 'en' ? 'ar' : 'en';
-          applyLang(currentLang);
-        });
+      /* language toggle */
+      document.getElementById('lang-toggle').addEventListener('click',()=>{
+        currentLang = currentLang==='en'?'ar':'en';
+        applyLang(currentLang);
+      });
 
-      // modal logic
-      const modal      = document.getElementById('modal');
-      const mImg       = document.getElementById('modal-img');
-      const mTitle     = document.getElementById('modal-title');
-      const mText      = document.getElementById('modal-text');
-      const closeBtn   = document.querySelector('.modal-close');
+      /* modal logic */
+      const modal = document.getElementById('modal');
+      const mImg  = document.getElementById('modal-img');
+      const mTitle= document.getElementById('modal-title');
+      const mText = document.getElementById('modal-text');
+      const closeBtn=document.querySelector('.modal-close');
 
-      document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('click', () => {
+      document.querySelectorAll('.card').forEach(card=>{
+        card.addEventListener('click',()=>{
           const type = card.dataset.type;
-          const t    = translations[currentLang][type];
-          mImg.src           = card.querySelector('img').src;
-          mImg.alt           = t.title;
-          mTitle.textContent = t.title;
-          mText.textContent  = t.extra;
-          const fill = (id, arr) => {
-            document.getElementById(id).innerHTML =
-              arr.map(i => `<li>${i}</li>`).join('');
-          };
-          fill('modal-purpose',      t.purpose);
-          fill('modal-composition',  t.composition);
-          fill('modal-packaging',    t.packaging);
-          fill('modal-usage',        t.usage);
-          fill('modal-safety',       t.safety);
-          fill('modal-maintenance',  t.maintenance);
-          fill('modal-certifications', t.certifications);
-          fill('modal-storage',      t.storage);
-          fill('modal-ergonomics',   t.ergonomics);
-          fill('modal-disposal',     t.disposal);
+          const t = translations[currentLang][type];
+          mImg.src = card.querySelector('img').src;
+          mImg.alt = t.title; mTitle.textContent = t.title; mText.textContent = t.extra;
+          const fill=(id,arr)=>{ document.getElementById(id).innerHTML=arr.map(i=>`<li>${i}</li>`).join(''); };
+          fill('modal-purpose',t.purpose);fill('modal-composition',t.composition);fill('modal-packaging',t.packaging);
+          fill('modal-usage',t.usage);fill('modal-safety',t.safety);fill('modal-maintenance',t.maintenance);
+          fill('modal-certifications',t.certifications);fill('modal-storage',t.storage);
+          fill('modal-ergonomics',t.ergonomics);fill('modal-disposal',t.disposal);
           modal.classList.add('show');
         });
       });
+      closeBtn.addEventListener('click',()=>modal.classList.remove('show'));
+      modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('show'); });
 
-      // close modal
-      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
-      modal.addEventListener('click', e => {
-        if (e.target === modal) modal.classList.remove('show');
-      });
-
-      function applyLang(lang) {
+      function applyLang(lang){
         const t = translations[lang];
         document.documentElement.dir  = t.dir;
         document.documentElement.lang = t.langAttr;
         document.getElementById('header-title').textContent = t.header;
         document.getElementById('footer-text').textContent  = t.footer;
-        Object.entries(t.headings).forEach(([key,val]) => {
-          document.getElementById('hdr-'+key).textContent = val;
-        });
-        ['bandages','gauze','tape','wipes','ointment','tweezers','scissors','gloves','coldpack','ace','cpr','meds']
-          .forEach(type => {
-            document.getElementById('title-'+type).textContent = t[type].title;
-            document.getElementById('desc-'+type).textContent  = t[type].desc;
-          });
-      }
+        Object.entries(t.headings).forEach(([k,v])=>{document.getElementById('hdr-'+k).textContent=v;});
 
+        /* list of cards we actually show (ointment removed) */
+        ['bandages','gauze','tape','wipes','tweezers','scissors',
+         'gloves','coldpack','ace','cpr','meds']
+        .forEach(type=>{
+          document.getElementById('title-'+type).textContent = t[type].title;
+          document.getElementById('desc-'+type ).textContent = t[type].desc;
+        });
+      }
       applyLang(currentLang);
     });
   </script>
